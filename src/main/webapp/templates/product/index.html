@@ -37,6 +37,15 @@
 <div class="container">
     <div class="card">
         <strong th:text="${category.name}">Category Title</strong>
+        <div>
+            <div th:each="item : ${list}">
+                <p th:text = "${item}"></p>
+            </div>
+            <form method="get">
+            <input name="first" type="text", th:value="${category.code}">
+            <button type="submit">Submit</button>
+            </form>
+        </div>
     </div>
 
     <div id="products" class="row">

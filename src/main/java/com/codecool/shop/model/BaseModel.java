@@ -8,6 +8,7 @@ public class BaseModel {
     protected int id;
     protected String name;
     protected String description;
+    protected String code = "Dupa";
 
     public BaseModel(String name) {
         this.name = name;
@@ -16,6 +17,14 @@ public class BaseModel {
     public BaseModel(String name, String description) {
         this.name = name;
         this.description = description;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
 
