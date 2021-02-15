@@ -20,30 +20,34 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-@WebServlet(urlPatterns = {"/", "/no-filter"})
-public class ProductController extends HttpServlet {
+@WebServlet(urlPatterns = {"/category-filter"})
+public class CategoryFilter extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         ProductDao productDataStore = ProductDaoMem.getInstance();
         ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
+        ArrayList<Product> currentlySelected = new ArrayList<Product>();
+
 
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
         WebContext context = new WebContext(req, resp, req.getServletContext());
         context.setVariable("categories", productCategoryDataStore.getAll());
         context.setVariable("category", productCategoryDataStore.find(1));
         context.setVariable("productsAll", productDataStore.getAll());
+        context.setVariable("currentlySelected", currentlySelected);
         context.setVariable("tablets", productDataStore.getBy(productCategoryDataStore.find(1)));
         context.setVariable("laptops", productDataStore.getBy(productCategoryDataStore.find(3)));
         context.setVariable("smartphones", productDataStore.getBy(productCategoryDataStore.find(2)));
-        // // Alternative setting of the template context
-        // Map<String, Object> params = new HashMap<>();
-        // params.put("category", productCategoryDataStore.find(1));
-        // params.put("products", productDataStore.getBy(productCategoryDataStore.find(1)));
-        // context.setVariables(params);
-        engine.process("product/index.html", context, resp.getWriter());
+        context.setVariable("sortKey", req.getParameter("category"));
+        String url = req.getParameter("category");
 
+        if (url.equals("no-filter")) {
+            engine.process("product/index.html", context, resp.getWriter());
+        } else {
+            engine.process("product/" + url + ".html", context, resp.getWriter());
+        }
     }
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
