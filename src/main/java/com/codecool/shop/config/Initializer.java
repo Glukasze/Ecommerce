@@ -32,11 +32,11 @@ public class Initializer implements ServletContextListener {
         supplierDataStore.add(apple);
 
         //setting up a new product category
-        ProductCategory tablet = new ProductCategory("Tablet", "Hardware", "A tablet computer, commonly shortened to tablet, is a thin, flat mobile computer with a touchscreen display.");
+        ProductCategory tablet = new ProductCategory("tablet", "Hardware", "A tablet computer, commonly shortened to tablet, is a thin, flat mobile computer with a touchscreen display.");
         productCategoryDataStore.add(tablet);
-        ProductCategory smartphone = new ProductCategory("Smartphone", "Hardware", "A mobile device that combines cellular and mobile computing functions into one unit.");
+        ProductCategory smartphone = new ProductCategory("smartphone", "Hardware", "A mobile device that combines cellular and mobile computing functions into one unit.");
         productCategoryDataStore.add(smartphone);
-        ProductCategory laptop = new ProductCategory("Laptop", "Hardware", "A small, portable personal computer (PC) typically having a thin LCD or LED computer screen");
+        ProductCategory laptop = new ProductCategory("laptop", "Hardware", "A small, portable personal computer (PC) typically having a thin LCD or LED computer screen");
         productCategoryDataStore.add(laptop);
 
         //setting up products and printing it
@@ -45,6 +45,7 @@ public class Initializer implements ServletContextListener {
         productDataStore.add(new Product("Amazon Fire HD 8", 89, "USD", "Amazon's latest Fire HD 8 tablet is a great value for media consumption.", tablet, amazon));
 
         productDataStore.add(new Product("iPhone 7", 199, "USD", "Advanced dual camera system which offers up to 2 hours longer battery life", smartphone, apple));
+
         productDataStore.add(new Product("MacBook Air M1", 999, "USD", "Now with the new Apple M1 chip for faster-than-ever performance and all-new capabilities", laptop, apple));
     }
 }
