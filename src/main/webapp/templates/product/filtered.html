@@ -42,7 +42,13 @@
                 <select id="category" name="category">
                     <option value="no-filter">no filter</option>
                     <option th:each="item : ${categories}" th:value="${item.name}" th:text = "${item.name}"
-                    th:selected="${item.name == 'smartphone'}"></option>
+                            th:selected="${item.name == selectedCategory}"></option>
+                </select>
+                <label for="supplier">Supplier: </label>
+                <select id="supplier" name="supplier">
+                    <option value="no-filter">no filter</option>
+                    <option th:each="item : ${suppliers}" th:value="${item.name}" th:text = "${item.name}"
+                            th:selected="${item.name == selectedSupplier}"></option>
                 </select>
                 <button type="submit">Submit</button>
             </form>
@@ -50,7 +56,7 @@
     </div>
 
     <div id="products" class="row">
-        <div class="col col-sm-12 col-md-6 col-lg-4" th:each="prod,iterStat : ${smartphones}">
+        <div class="col col-sm-12 col-md-6 col-lg-4" th:each="prod,iterStat : ${productsSelected}">
             <div class="card">
                 <img class="" src="http://placehold.it/400x250/000/fff" th:attr="src='/static/img/product_' + ${prod.id} + '.jpg'" alt="" />
                 <div class="card-header">
