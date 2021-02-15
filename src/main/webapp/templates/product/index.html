@@ -38,10 +38,15 @@
     <div class="card">
         <div>
             <form method="post" action="/category-filter">
-                <label for="category">Category:</label>
+                <label for="category">Category: </label>
                 <select id="category" name="category">
                     <option value="no-filter">no filter</option>
                     <option th:each="item : ${categories}" th:value="${item.name}" th:text = "${item.name}"></option>
+                </select>
+                <label for="supplier">Supplier: </label>
+                <select id="supplier" name="supplier">
+                    <option value="no-filter">no filter</option>
+                    <option th:each="item : ${suppliers}" th:value="${item.name}" th:text = "${item.name}"></option>
                 </select>
                 <button type="submit">Submit</button>
             </form>

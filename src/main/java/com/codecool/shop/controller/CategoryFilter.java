@@ -3,9 +3,11 @@ package com.codecool.shop.controller;
 import com.codecool.shop.config.Initializer;
 import com.codecool.shop.dao.ProductCategoryDao;
 import com.codecool.shop.dao.ProductDao;
+import com.codecool.shop.dao.SupplierDao;
 import com.codecool.shop.dao.implementation.ProductCategoryDaoMem;
 import com.codecool.shop.dao.implementation.ProductDaoMem;
 import com.codecool.shop.config.TemplateEngineUtil;
+import com.codecool.shop.dao.implementation.SupplierDaoMem;
 import com.codecool.shop.model.Product;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -28,26 +30,58 @@ public class CategoryFilter extends HttpServlet {
 
         ProductDao productDataStore = ProductDaoMem.getInstance();
         ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
-        ArrayList<Product> currentlySelected = new ArrayList<Product>();
+        SupplierDao supplierDataStore = SupplierDaoMem.getInstance();
+
+        ArrayList<Product> categorySelected = new ArrayList<>();
+        ArrayList<Product> supplierSelected = new ArrayList<>();
+        ArrayList<Product> productsSelected;
+
+        switch (req.getParameter("category")) {
+            case "no-filter":
+                categorySelected.addAll(productDataStore.getAll());
+                break;
+            case "tablet":
+                categorySelected.addAll(productDataStore.getBy(productCategoryDataStore.find(1)));
+                break;
+            case "smartphone":
+                categorySelected.addAll(productDataStore.getBy(productCategoryDataStore.find(2)));
+                break;
+            case "laptop":
+                categorySelected.addAll(productDataStore.getBy(productCategoryDataStore.find(3)));
+                break;
+        }
+        switch (req.getParameter("supplier")) {
+            case "no-filter":
+                supplierSelected.addAll(productDataStore.getAll());
+                break;
+            case "Amazon":
+                supplierSelected.addAll(productDataStore.getBy(supplierDataStore.find(1)));
+                break;
+            case "Lenovo":
+                supplierSelected.addAll(productDataStore.getBy(supplierDataStore.find(2)));
+                break;
+            case "Apple":
+                supplierSelected.addAll(productDataStore.getBy(supplierDataStore.find(3)));
+                break;
+        }
+
+        categorySelected.retainAll(supplierSelected);
+        productsSelected = categorySelected;
 
 
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
         WebContext context = new WebContext(req, resp, req.getServletContext());
+
+        context.setVariable("selectedCategory", req.getParameter("category"));
+        context.setVariable("selectedSupplier", req.getParameter("supplier"));
         context.setVariable("categories", productCategoryDataStore.getAll());
+        context.setVariable("suppliers", supplierDataStore.getAll());
         context.setVariable("category", productCategoryDataStore.find(1));
         context.setVariable("productsAll", productDataStore.getAll());
-        context.setVariable("currentlySelected", currentlySelected);
-        context.setVariable("tablets", productDataStore.getBy(productCategoryDataStore.find(1)));
-        context.setVariable("laptops", productDataStore.getBy(productCategoryDataStore.find(3)));
-        context.setVariable("smartphones", productDataStore.getBy(productCategoryDataStore.find(2)));
-        context.setVariable("sortKey", req.getParameter("category"));
+        context.setVariable("productsSelected", productsSelected);
         String url = req.getParameter("category");
 
-        if (url.equals("no-filter")) {
-            engine.process("product/index.html", context, resp.getWriter());
-        } else {
-            engine.process("product/" + url + ".html", context, resp.getWriter());
-        }
+        engine.process("product/filtered.html", context, resp.getWriter());
     }
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
