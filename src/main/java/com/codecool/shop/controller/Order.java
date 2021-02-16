@@ -1,12 +1,11 @@
 package com.codecool.shop.controller;
 
-import com.codecool.shop.config.Initializer;
+import com.codecool.shop.config.TemplateEngineUtil;
 import com.codecool.shop.dao.ProductCategoryDao;
 import com.codecool.shop.dao.ProductDao;
 import com.codecool.shop.dao.SupplierDao;
 import com.codecool.shop.dao.implementation.ProductCategoryDaoMem;
 import com.codecool.shop.dao.implementation.ProductDaoMem;
-import com.codecool.shop.config.TemplateEngineUtil;
 import com.codecool.shop.dao.implementation.SupplierDaoMem;
 import com.codecool.shop.model.Product;
 import org.thymeleaf.TemplateEngine;
@@ -19,11 +18,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
-@WebServlet(urlPatterns = {"/category-filter"})
-public class CategoryFilter extends HttpServlet {
+@WebServlet(urlPatterns = {"/order"})
+public class Order extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -32,41 +29,6 @@ public class CategoryFilter extends HttpServlet {
         ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
         SupplierDao supplierDataStore = SupplierDaoMem.getInstance();
 
-        ArrayList<Product> categorySelected = new ArrayList<>();
-        ArrayList<Product> supplierSelected = new ArrayList<>();
-        ArrayList<Product> productsSelected;
-
-        switch (req.getParameter("category")) {
-            case "no-filter":
-                categorySelected.addAll(productDataStore.getAll());
-                break;
-            case "tablet":
-                categorySelected.addAll(productDataStore.getBy(productCategoryDataStore.find(1)));
-                break;
-            case "smartphone":
-                categorySelected.addAll(productDataStore.getBy(productCategoryDataStore.find(2)));
-                break;
-            case "laptop":
-                categorySelected.addAll(productDataStore.getBy(productCategoryDataStore.find(3)));
-                break;
-        }
-        switch (req.getParameter("supplier")) {
-            case "no-filter":
-                supplierSelected.addAll(productDataStore.getAll());
-                break;
-            case "Amazon":
-                supplierSelected.addAll(productDataStore.getBy(supplierDataStore.find(1)));
-                break;
-            case "Lenovo":
-                supplierSelected.addAll(productDataStore.getBy(supplierDataStore.find(2)));
-                break;
-            case "Apple":
-                supplierSelected.addAll(productDataStore.getBy(supplierDataStore.find(3)));
-                break;
-        }
-
-        categorySelected.retainAll(supplierSelected);
-        productsSelected = categorySelected;
 
 
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
@@ -78,11 +40,9 @@ public class CategoryFilter extends HttpServlet {
         context.setVariable("suppliers", supplierDataStore.getAll());
         context.setVariable("category", productCategoryDataStore.find(1));
         context.setVariable("productsAll", productDataStore.getAll());
-        context.setVariable("productsSelected", productsSelected);
         String url = req.getParameter("category");
 
-
-        engine.process("product/filtered.html", context, resp.getWriter());
+        engine.process("product/order.html", context, resp.getWriter());
     }
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

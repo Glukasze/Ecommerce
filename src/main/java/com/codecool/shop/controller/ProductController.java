@@ -23,8 +23,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-@WebServlet(urlPatterns = {"/", "/no-filter"})
+@WebServlet(urlPatterns = {"/", "/#"})
 public class ProductController extends HttpServlet {
+
+    int itemsInCart = 0;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -33,12 +35,15 @@ public class ProductController extends HttpServlet {
         ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
         SupplierDao supplierDataStore = SupplierDaoMem.getInstance();
 
+
+
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
         WebContext context = new WebContext(req, resp, req.getServletContext());
         context.setVariable("categories", productCategoryDataStore.getAll());
         context.setVariable("suppliers", supplierDataStore.getAll());
         context.setVariable("category", productCategoryDataStore.find(1));
         context.setVariable("productsAll", productDataStore.getAll());
+        context.setVariable("itemsInCart", itemsInCart);
         // // Alternative setting of the template context
         // Map<String, Object> params = new HashMap<>();
         // params.put("category", productCategoryDataStore.find(1));
@@ -50,6 +55,11 @@ public class ProductController extends HttpServlet {
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         doGet(req, resp);
+
+
+        itemsInCart += Integer.parseInt(req.getParameter("add-to-cart"));
+
+
     }
 
 }
