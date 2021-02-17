@@ -12,6 +12,7 @@ import com.codecool.shop.model.Product;
 import com.codecool.shop.model.Supplier;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
+import com.codecool.shop.model.Order;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -26,7 +27,7 @@ import java.util.Map;
 @WebServlet(urlPatterns = {"/", "/#"})
 public class ProductController extends HttpServlet {
 
-    int itemsInCart = 0;
+    Order order = new Order();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -43,7 +44,7 @@ public class ProductController extends HttpServlet {
         context.setVariable("suppliers", supplierDataStore.getAll());
         context.setVariable("category", productCategoryDataStore.find(1));
         context.setVariable("productsAll", productDataStore.getAll());
-        context.setVariable("itemsInCart", itemsInCart);
+        context.setVariable("itemsInCart", order.getProductsOrdered().size());
         // // Alternative setting of the template context
         // Map<String, Object> params = new HashMap<>();
         // params.put("category", productCategoryDataStore.find(1));
@@ -56,8 +57,11 @@ public class ProductController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         doGet(req, resp);
 
-
-        itemsInCart += Integer.parseInt(req.getParameter("add-to-cart"));
+        if (!(req.getParameter("add-to-cart") == null)) {
+            Product temp = ProductDaoMem.getInstance().find(Integer.parseInt(req.getParameter("add-to-cart")));
+            order.addProduct(temp);
+            System.out.println(req.getParameter("add-to-cart"));
+        }
 
 
     }

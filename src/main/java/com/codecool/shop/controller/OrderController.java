@@ -7,6 +7,7 @@ import com.codecool.shop.dao.SupplierDao;
 import com.codecool.shop.dao.implementation.ProductCategoryDaoMem;
 import com.codecool.shop.dao.implementation.ProductDaoMem;
 import com.codecool.shop.dao.implementation.SupplierDaoMem;
+import com.codecool.shop.model.Order;
 import com.codecool.shop.model.Product;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -20,7 +21,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 @WebServlet(urlPatterns = {"/order"})
-public class Order extends HttpServlet {
+public class OrderController extends HttpServlet {
+
+    Order order = new Order();
+
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -39,6 +43,9 @@ public class Order extends HttpServlet {
         context.setVariable("categories", productCategoryDataStore.getAll());
         context.setVariable("suppliers", supplierDataStore.getAll());
         context.setVariable("category", productCategoryDataStore.find(1));
+        context.setVariable("order", order);
+
+
         context.setVariable("productsAll", productDataStore.getAll());
         String url = req.getParameter("category");
 
@@ -47,6 +54,12 @@ public class Order extends HttpServlet {
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         doGet(req, resp);
+
+        if (!(req.getParameter("remove-from-cart") == null)) {
+            Product temp = ProductDaoMem.getInstance().find(Integer.parseInt(req.getParameter("remove-from-cart")));
+            order.removeProduct(temp);
+        }
+
     }
 
 }

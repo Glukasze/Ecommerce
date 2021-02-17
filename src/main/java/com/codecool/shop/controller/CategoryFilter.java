@@ -8,6 +8,7 @@ import com.codecool.shop.dao.implementation.ProductCategoryDaoMem;
 import com.codecool.shop.dao.implementation.ProductDaoMem;
 import com.codecool.shop.config.TemplateEngineUtil;
 import com.codecool.shop.dao.implementation.SupplierDaoMem;
+import com.codecool.shop.model.Order;
 import com.codecool.shop.model.Product;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -24,6 +25,8 @@ import java.util.Map;
 
 @WebServlet(urlPatterns = {"/category-filter"})
 public class CategoryFilter extends HttpServlet {
+
+    Order order = new Order();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -79,7 +82,7 @@ public class CategoryFilter extends HttpServlet {
         context.setVariable("category", productCategoryDataStore.find(1));
         context.setVariable("productsAll", productDataStore.getAll());
         context.setVariable("productsSelected", productsSelected);
-        String url = req.getParameter("category");
+        context.setVariable("itemsInCart", order.getProductsOrdered().size());
 
 
         engine.process("product/filtered.html", context, resp.getWriter());
@@ -87,6 +90,13 @@ public class CategoryFilter extends HttpServlet {
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         doGet(req, resp);
+
+        if (!(req.getParameter("add-to-cart") == null)) {
+            Product temp = ProductDaoMem.getInstance().find(Integer.parseInt(req.getParameter("add-to-cart")));
+            order.addProduct(temp);
+            System.out.println(req.getParameter("add-to-cart"));
+        }
+
     }
 
 }

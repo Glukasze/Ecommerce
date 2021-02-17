@@ -34,8 +34,17 @@
     <h1>Codecool Shop</h1>
 </div>
 
+<div class="card">
+    <div class="card-body">
+        <a href="http://localhost:8080/order">
+            <img class="float-right" id="cart" src="../../static/img/cart.png" height="5%" width="5%"/>
+        </a>
+    </div>
+    <p class="text-right" th:text="${itemsInCart}" style="margin-right: 40px; font-size: 200%; color: #cd5c5c"></p>
+</div>
+
 <form method="post" action="/category-filter">
-    <div class="form-row align-items-center">
+    <div class="form-row justify-content-center">
         <div class="col-auto my-1">
             <label class="mr-sm-2" for="inlineFormCustomSelect" >Category: </label>
             <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="category">
@@ -92,7 +101,9 @@
                         <p class="lead" th:text="${prod.getPrice()}">100 USD</p>
                     </div>
                     <div class="card-text">
-                        <a class="btn btn-success" href="#">Add to cart</a>
+                        <form action="/" method="post">
+                            <button type="submit" class="btn btn-success" name="add-to-cart" th:value="${prod.getId()}">Add to cart</button>
+                        </form>
                     </div>
                 </div>
             </div>
