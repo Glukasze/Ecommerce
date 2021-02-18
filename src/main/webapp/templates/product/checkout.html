@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Payment</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <link rel="stylesheet" href="../../static/css/checkout.css">
+</head>
+<body>
+<main class="page payment-page">
+    <section class="payment-form dark">
+        <div class="container">
+            <div class="block-heading">
+                <h2>Checkout</h2>
+                <p>Please review your order and provide payment details</p>
+            </div>
+            <form method="post" action="/paid">
+                <div class="products">
+                    <h3 class="title">Checkout</h3>
+                    <div class="item" th:each="prod : ${order.getProductsOrdered()}">
+                        <span class="price" th:text="${prod.getPrice()}"></span>
+                        <p class="item-name" th:text="${prod.getName()}"></p>
+                        <p class="item-description" th:text="${prod.getSupplier().getName()}"></p>
+                    </div>
+                    <div class="total">
+                        <span class="price">
+                            <p th:text="${order.getTotalPrice()}">
+                        </span></div>
+                </div>
+                <div class="card-details">
+                    <h3 class="title">Credit Card Details</h3>
+                    <div class="row">
+                        <div class="form-group col-sm-7">
+                            <label for="card-holder">Card Holder</label>
+                            <input required name="card-holder" id="card-holder" type="text" class="form-control" placeholder="Card Holder" aria-label="Card Holder" aria-describedby="basic-addon1">
+                        </div>
+                        <div class="form-group col-sm-5">
+                            <label for="">Expiration Date</label>
+                            <div class="input-group expiration-date">
+                                <input required type="number" min="1" max="12" class="form-control" placeholder="MM" aria-label="MM" aria-describedby="basic-addon1">
+                                <span class="date-separator">/</span>
+                                <input required type="number" min="2021" max="2050" class="form-control" placeholder="YY" aria-label="YY" aria-describedby="basic-addon1">
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-8">
+                            <label for="card-number">Card Number</label>
+                            <input required id="card-number" type="tel" inputmode="numeric" pattern="[0-9\s]{13,19}" maxlength="19" placeholder="xxxx xxxx xxxx xxxx" class="form-control" aria-label="Card Holder" aria-describedby="basic-addon1">
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <label for="cvc">CVC</label>
+                            <input id="cvc" required type="number" min="100" max="999" class="form-control" placeholder="CVC" aria-label="Card Holder" aria-describedby="basic-addon1">
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <a href="http://localhost:8080/paid">
+                                <button type="submit" class="btn btn-primary btn-block">Proceed</button>
+                            </a>
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <a href="http://localhost:8080/order" class="btn btn-danger btn-block">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+</main>
+</body>
+</html>

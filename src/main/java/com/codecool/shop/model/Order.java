@@ -9,8 +9,8 @@ public class Order {
     public Order() {
     }
 
-    public void setProductsOrdered(ArrayList<Product> productsOrdered) {
-        Order.productsOrdered = productsOrdered;
+    public void clearProductsOrdered() {
+        Order.productsOrdered.clear();
     }
 
     public void addProduct(Product product) {
@@ -32,6 +32,5 @@ public class Order {
         }
         return String.valueOf(temp) + " USD";
     }
-
 
 }
