@@ -55,15 +55,13 @@ public class ProductController extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doGet(req, resp);
 
         if (!(req.getParameter("add-to-cart") == null)) {
             Product temp = ProductDaoMem.getInstance().find(Integer.parseInt(req.getParameter("add-to-cart")));
             order.addProduct(temp);
             System.out.println(req.getParameter("add-to-cart"));
         }
-
-
+        doGet(req, resp);
     }
 
 }

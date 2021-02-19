@@ -30,6 +30,12 @@ public class Initializer implements ServletContextListener {
         supplierDataStore.add(lenovo);
         Supplier apple = new Supplier("Apple", "Computers");
         supplierDataStore.add(apple);
+        Supplier lg = new Supplier("LG", "TV");
+        supplierDataStore.add(lg);
+        Supplier galaxy = new Supplier("Galaxy", "digital content and services");
+        supplierDataStore.add(galaxy);
+        Supplier asus = new Supplier("Asus", "Computers");
+        supplierDataStore.add(asus);
 
         //setting up a new product category
         ProductCategory tablet = new ProductCategory("tablet", "Hardware", "A tablet computer, commonly shortened to tablet, is a thin, flat mobile computer with a touchscreen display.");
@@ -38,13 +44,17 @@ public class Initializer implements ServletContextListener {
         productCategoryDataStore.add(smartphone);
         ProductCategory laptop = new ProductCategory("laptop", "Hardware", "A small, portable personal computer (PC) typically having a thin LCD or LED computer screen");
         productCategoryDataStore.add(laptop);
+        ProductCategory TV = new ProductCategory("TV", "Hardware", "A device with a screen for receiving television signals.");
+        productCategoryDataStore.add(TV);
 
         //setting up products and printing it
         productDataStore.add(new Product("Amazon Fire", 49.9f, "USD", "Fantastic price. Large content ecosystem. Good parental controls. Helpful technical support.", tablet, amazon));
         productDataStore.add(new Product("Lenovo IdeaPad Miix 700", 479, "USD", "Keyboard cover is included. Fanless Core m5 processor. Full-size USB ports. Adjustable kickstand.", tablet, lenovo));
         productDataStore.add(new Product("Amazon Fire HD 8", 89, "USD", "Amazon's latest Fire HD 8 tablet is a great value for media consumption.", tablet, amazon));
 
-        productDataStore.add(new Product("iPhone 7", 199, "USD", "Advanced dual camera system which offers up to 2 hours longer battery life", smartphone, apple));
+        productDataStore.add(new Product("iPhone 7", 199, "USD", "Advanced dual camera system which offers up to 2 hours longer battery life. High-definition touch screen display.", smartphone, apple));
+        productDataStore.add(new Product("iPhone 12", 699, "USD", "5G speed. A14 Bionic, the fastest chip in a smartphone. An edge-to-edge OLED display.", smartphone, apple));
+        productDataStore.add(new Product("Galaxy S21 Ultra 5G", 499, "USD", "The highest resolution photos and video on a smartphone.Galaxy's fastest processor yet. A battery that goes all-day—and then some.", smartphone, galaxy));
 
         productDataStore.add(new Product("MacBook Air M1", 999, "USD", "Now with the new Apple M1 chip for faster-than-ever performance and all-new capabilities", laptop, apple));
     }

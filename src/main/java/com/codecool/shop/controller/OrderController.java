@@ -53,13 +53,12 @@ public class OrderController extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doGet(req, resp);
 
         if (!(req.getParameter("remove-from-cart") == null)) {
             Product temp = ProductDaoMem.getInstance().find(Integer.parseInt(req.getParameter("remove-from-cart")));
             order.removeProduct(temp);
         }
-
+        doGet(req, resp);
     }
 
 }

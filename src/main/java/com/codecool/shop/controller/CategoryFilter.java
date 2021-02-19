@@ -66,6 +66,15 @@ public class CategoryFilter extends HttpServlet {
             case "Apple":
                 supplierSelected.addAll(productDataStore.getBy(supplierDataStore.find(3)));
                 break;
+            case "LG":
+                supplierSelected.addAll(productDataStore.getBy(supplierDataStore.find(4)));
+                break;
+            case "Galaxy":
+                supplierSelected.addAll(productDataStore.getBy(supplierDataStore.find(5)));
+                break;
+            case "Asus":
+                supplierSelected.addAll(productDataStore.getBy(supplierDataStore.find(6)));
+                break;
         }
 
         categorySelected.retainAll(supplierSelected);
@@ -89,14 +98,12 @@ public class CategoryFilter extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doGet(req, resp);
 
         if (!(req.getParameter("add-to-cart") == null)) {
             Product temp = ProductDaoMem.getInstance().find(Integer.parseInt(req.getParameter("add-to-cart")));
             order.addProduct(temp);
-            System.out.println(req.getParameter("add-to-cart"));
         }
-
+        doGet(req, resp);
     }
 
 }

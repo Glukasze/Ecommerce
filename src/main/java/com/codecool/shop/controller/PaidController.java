@@ -35,10 +35,9 @@ public class PaidController extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doGet(req, resp);
 
         order.clearProductsOrdered();
-
+        doGet(req, resp);
 
     }
 
