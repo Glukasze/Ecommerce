@@ -44,8 +44,8 @@ public class Initializer implements ServletContextListener {
         productCategoryDataStore.add(smartphone);
         ProductCategory laptop = new ProductCategory("laptop", "Hardware", "A small, portable personal computer (PC) typically having a thin LCD or LED computer screen");
         productCategoryDataStore.add(laptop);
-        ProductCategory TV = new ProductCategory("TV", "Hardware", "A device with a screen for receiving television signals.");
-        productCategoryDataStore.add(TV);
+        ProductCategory tv = new ProductCategory("TV", "Hardware", "A device with a screen for receiving television signals.");
+        productCategoryDataStore.add(tv);
 
         //setting up products and printing it
         productDataStore.add(new Product("Amazon Fire", 49.9f, "USD", "Fantastic price. Large content ecosystem. Good parental controls. Helpful technical support.", tablet, amazon));
@@ -57,5 +57,11 @@ public class Initializer implements ServletContextListener {
         productDataStore.add(new Product("Galaxy S21 Ultra 5G", 499, "USD", "The highest resolution photos and video on a smartphone.Galaxy's fastest processor yet. A battery that goes all-day—and then some.", smartphone, galaxy));
 
         productDataStore.add(new Product("MacBook Air M1", 999, "USD", "Now with the new Apple M1 chip for faster-than-ever performance and all-new capabilities", laptop, apple));
+        productDataStore.add(new Product("VivoBook X509JA", 799, "USD", "Delivers powerful performance and immersive visuals. wide viewing angles and a matte anti-glare coating", laptop, asus));
+        productDataStore.add(new Product("ExpertBook", 999, "USD", "Mobility, lightness, next-gen power and military-grade toughness.", laptop, asus));
+
+        productDataStore.add(new Product("LG LED 55NANO867NA", 899, "USD", "The most advanced UHD technology, Sublime 4K Ultra HD picture quality with pure and realistic colours", tv, lg));
+        productDataStore.add(new Product("LG OLED OLED77CX3LA", 3299, "USD", "Self-lighting OLED: Perfect Black, Intense Color, Infinite Contrast, Dolby Vision IQ and Dolby Atmos", tv, lg));
+        productDataStore.add(new Product("LG OLED 65BX3LB", 2099, "USD", "WebOS + ThinQ AI w/ Magic Remote. Gaming: G-SYNC Compatible, FreeSync, VRR, ALLM", tv, lg));
     }
 }
