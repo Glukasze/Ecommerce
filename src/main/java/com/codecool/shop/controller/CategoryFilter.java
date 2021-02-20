@@ -1,6 +1,5 @@
 package com.codecool.shop.controller;
 
-import com.codecool.shop.config.Initializer;
 import com.codecool.shop.dao.ProductCategoryDao;
 import com.codecool.shop.dao.ProductDao;
 import com.codecool.shop.dao.SupplierDao;
@@ -20,8 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 @WebServlet(urlPatterns = {"/category-filter"})
 public class CategoryFilter extends HttpServlet {
@@ -39,6 +36,38 @@ public class CategoryFilter extends HttpServlet {
         ArrayList<Product> supplierSelected = new ArrayList<>();
         ArrayList<Product> productsSelected;
 
+        filterSelect(req, productDataStore, productCategoryDataStore, supplierDataStore, categorySelected, supplierSelected);
+
+        categorySelected.retainAll(supplierSelected);
+        productsSelected = categorySelected;
+
+
+        TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
+        WebContext context = new WebContext(req, resp, req.getServletContext());
+
+        context.setVariable("selectedCategory", req.getParameter("category"));
+        context.setVariable("selectedSupplier", req.getParameter("supplier"));
+        context.setVariable("categories", productCategoryDataStore.getAll());
+        context.setVariable("suppliers", supplierDataStore.getAll());
+        context.setVariable("category", productCategoryDataStore.find(1));
+        context.setVariable("productsAll", productDataStore.getAll());
+        context.setVariable("productsSelected", productsSelected);
+        context.setVariable("itemsInCart", order.getProductsOrdered().size());
+
+
+        engine.process("product/filtered.html", context, resp.getWriter());
+    }
+
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        if (!(req.getParameter("add-to-cart") == null)) {
+            Product temp = ProductDaoMem.getInstance().find(Integer.parseInt(req.getParameter("add-to-cart")));
+            order.addProduct(temp);
+        }
+        doGet(req, resp);
+    }
+
+    private void filterSelect(HttpServletRequest req, ProductDao productDataStore, ProductCategoryDao productCategoryDataStore, SupplierDao supplierDataStore, ArrayList<Product> categorySelected, ArrayList<Product> supplierSelected) {
         switch (req.getParameter("category")) {
             case "no-filter":
                 categorySelected.addAll(productDataStore.getAll());
@@ -79,34 +108,6 @@ public class CategoryFilter extends HttpServlet {
                 supplierSelected.addAll(productDataStore.getBy(supplierDataStore.find(6)));
                 break;
         }
-
-        categorySelected.retainAll(supplierSelected);
-        productsSelected = categorySelected;
-
-
-        TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
-        WebContext context = new WebContext(req, resp, req.getServletContext());
-
-        context.setVariable("selectedCategory", req.getParameter("category"));
-        context.setVariable("selectedSupplier", req.getParameter("supplier"));
-        context.setVariable("categories", productCategoryDataStore.getAll());
-        context.setVariable("suppliers", supplierDataStore.getAll());
-        context.setVariable("category", productCategoryDataStore.find(1));
-        context.setVariable("productsAll", productDataStore.getAll());
-        context.setVariable("productsSelected", productsSelected);
-        context.setVariable("itemsInCart", order.getProductsOrdered().size());
-
-
-        engine.process("product/filtered.html", context, resp.getWriter());
-    }
-
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        if (!(req.getParameter("add-to-cart") == null)) {
-            Product temp = ProductDaoMem.getInstance().find(Integer.parseInt(req.getParameter("add-to-cart")));
-            order.addProduct(temp);
-        }
-        doGet(req, resp);
     }
 
 }

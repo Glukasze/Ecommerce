@@ -36,28 +36,30 @@ public class ProductController extends HttpServlet {
         ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
         SupplierDao supplierDataStore = SupplierDaoMem.getInstance();
 
-
-
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
+        WebContext context = getWebContext(req, resp, productDataStore, productCategoryDataStore, supplierDataStore);
+
+        engine.process("product/index.html", context, resp.getWriter());
+    }
+
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        boolean inputFieldNotEmpty = !(req.getParameter("add-to-cart") == null);
+        if (inputFieldNotEmpty) {
+            Product temp = ProductDaoMem.getInstance().find(Integer.parseInt(req.getParameter("add-to-cart")));
+            order.addProduct(temp);
+        }
+        doGet(req, resp);
+    }
+
+    private WebContext getWebContext(HttpServletRequest req, HttpServletResponse resp, ProductDao productDataStore, ProductCategoryDao productCategoryDataStore, SupplierDao supplierDataStore) {
         WebContext context = new WebContext(req, resp, req.getServletContext());
         context.setVariable("categories", productCategoryDataStore.getAll());
         context.setVariable("suppliers", supplierDataStore.getAll());
         context.setVariable("category", productCategoryDataStore.find(1));
         context.setVariable("productsAll", productDataStore.getAll());
         context.setVariable("itemsInCart", order.getProductsOrdered().size());
-
-        engine.process("product/index.html", context, resp.getWriter());
-
-    }
-
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        if (!(req.getParameter("add-to-cart") == null)) {
-            Product temp = ProductDaoMem.getInstance().find(Integer.parseInt(req.getParameter("add-to-cart")));
-            order.addProduct(temp);
-            System.out.println(req.getParameter("add-to-cart"));
-        }
-        doGet(req, resp);
+        return context;
     }
 
 }
