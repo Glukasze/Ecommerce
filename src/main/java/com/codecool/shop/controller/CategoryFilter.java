@@ -52,6 +52,9 @@ public class CategoryFilter extends HttpServlet {
             case "laptop":
                 categorySelected.addAll(productDataStore.getBy(productCategoryDataStore.find(3)));
                 break;
+            case "TV":
+                categorySelected.addAll(productDataStore.getBy(productCategoryDataStore.find(4)));
+                break;
         }
         switch (req.getParameter("supplier")) {
             case "no-filter":
